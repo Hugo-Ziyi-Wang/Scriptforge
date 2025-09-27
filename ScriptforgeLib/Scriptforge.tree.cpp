@@ -1,3 +1,13 @@
+﻿// 版权所有 © 2025 Scriptforge
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 module Scriptforge.tree;
 import std;
 import Scriptforge.err;
@@ -22,16 +32,16 @@ namespace Scriptforge::Tree {
 
 	template<typename T>requires requires(T t1, T t2) { t1 = t2; }
 	Tree<T>::nodeptr Tree<T>::del(nodeptr node) {
-		if (!node) throw Scriptforge::Err::Error{ "E0002", "�սڵ�" };
+		if (!node) throw Scriptforge::Err::Error{ "E0002", "空节点" };
 		Tree<T>::nodeptr father = node->father.lock();
 		if (!father) {
-			if (node != m_root) throw Scriptforge::Err::Error{ "E0003", "�����ڵ�" };
+			if (node != m_root) throw Scriptforge::Err::Error{ "E0003", "孤立节点" };
 			else m_root.reset();
 			return nullptr;
 		}
 		auto& vec = father->children;
 		auto  it = std::find(vec.begin(), vec.end(), node);
-		if (it == vec.end()) throw Scriptforge::Err::Error{ "E0001", "δ���ֽڵ�" };
+		if (it == vec.end()) throw Scriptforge::Err::Error{ "E0001", "未发现节点" };
 
 		vec.erase(it);
 		return father;
@@ -39,7 +49,7 @@ namespace Scriptforge::Tree {
 
 	template <typename T>requires requires(T t1, T t2) { t1 = t2; }
 	Tree<T>::nodeptr Tree<T>::add(nodeptr father) {
-		if (!father) throw Scriptforge::Err::Error{ "E0002", "�սڵ�" };
+		if (!father) throw Scriptforge::Err::Error{ "E0002", "空节点" };
 		nodeptr newnode{ make_shared<TreeNode>() };
 		auto& vec = father->children;
 		vec.push_back(newnode);
@@ -48,7 +58,7 @@ namespace Scriptforge::Tree {
 
 	template <typename T>requires requires(T t1, T t2) { t1 = t2; }
 	Tree<T>::nodeptr Tree<T>::add(nodeptr father, T& node) {
-		if (!father) throw Scriptforge::Err::Error{ "E0002", "�սڵ�" };
+		if (!father) throw Scriptforge::Err::Error{ "E0002", "空节点" };
 		nodeptr newnode{ make_shared<TreeNode>(node) };
 		auto& vec = father->children;
 		vec.push_back(newnode);
@@ -57,7 +67,7 @@ namespace Scriptforge::Tree {
 
 	template <typename T>requires requires(T t1, T t2) { t1 = t2; }
 	Tree<T>::nodeptr Tree<T>::add(nodeptr father, const T& node) {
-		if (!father) throw Scriptforge::Err::Error{ "E0002", "�սڵ�" };
+		if (!father) throw Scriptforge::Err::Error{ "E0002", "空节点" };
 		nodeptr newnode{ make_shared<TreeNode>(node) };
 		auto& vec = father->children;
 		vec.push_back(newnode);
